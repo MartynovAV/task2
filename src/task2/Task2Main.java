@@ -25,10 +25,11 @@ public class Task2Main {
 
         DecimalFormat df = new DecimalFormat("0.00");
         df.setRoundingMode(RoundingMode.UP);
+        String separator=File.separator;
 
         for (int i = 0; i <N_input ; i++) {
             inputFile[i]=args[2+i];
-            filePath[i]="C:\\task2\\"+inputFile[i];
+            filePath[i]="C:"+separator+"task2"+separator+inputFile[i];
             File file=new File(filePath[i]);
             try {
                 Scanner sc=new Scanner(file);
@@ -57,7 +58,7 @@ public class Task2Main {
         }
         // writing Date - Sum output file
         try {
-            String outfile1="C:\\task2\\"+stats_dates;
+            String outfile1="C:"+separator+"task2"+separator+stats_dates;
             FileWriter writer1 = new FileWriter(outfile1);
             map1.forEach((k,v) -> {
                 try {
@@ -73,7 +74,7 @@ public class Task2Main {
         }
         // writing Office Number - Sum output file
         try {
-            String outfile2="C:\\task2\\"+stats_offices;
+            String outfile2="C:"+separator+"task2"+separator+stats_offices;
             FileWriter writer2 = new FileWriter(outfile2);
             map2.forEach((k,v) -> {
                 try {
