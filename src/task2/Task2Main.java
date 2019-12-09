@@ -2,10 +2,6 @@ package task2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,9 +18,6 @@ public class Task2Main {
 
         HashMap<String, Double> map1=new HashMap<>(); // Date, Sum
         HashMap<String, Double> map2=new HashMap<>();  // Office Number, Sum
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        df.setRoundingMode(RoundingMode.UP);
         String separator=File.separator;
 
         for (int i = 0; i <N_input ; i++) {
@@ -61,22 +54,6 @@ public class Task2Main {
                 .stream()
                 .sorted((Map.Entry.<String, Double>comparingByKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        // writing Date - Sum output file
-        try {
-            String outfile1="C:"+separator+"task2"+separator+stats_dates;
-            FileWriter writer1 = new FileWriter(outfile1);
-            map1Sorted.forEach((k,v) -> {
-                try {
-                    writer1.write(k + " - " + df.format(v)+"\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-                writer1.close();
-                System.out.println(stats_dates+" has been generated.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         //sorting  Office Number - Sum by Sum value:
         LinkedHashMap<String, Double> map2Sorted= map2.entrySet()
@@ -84,21 +61,9 @@ public class Task2Main {
                 .sorted((Map.Entry.<String, Double>comparingByValue().reversed()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
+        // writing Date - Sum output file
+        Writer.writeMaptoFile(map1Sorted,stats_dates);
         // writing Office Number - Sum output file
-        try {
-            String outfile2="C:"+separator+"task2"+separator+stats_offices;
-            FileWriter writer2 = new FileWriter(outfile2);
-            map2Sorted.forEach((k,v) -> {
-                try {
-                    writer2.write(k + " - " + df.format(v)+"\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-                writer2.close();
-                System.out.println(stats_offices+" has been generated.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Writer.writeMaptoFile(map2Sorted,stats_offices);
     }
 }
