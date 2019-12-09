@@ -20,7 +20,7 @@ public class Task2Main {
         String [] inputFile=new String[N_input];
         String [] filePath=new String[N_input];
 
-        TreeMap<String, Double> map1=new TreeMap<>(); // Date, Sum
+        HashMap<String, Double> map1=new HashMap<>(); // Date, Sum
         HashMap<String, Double> map2=new HashMap<>();  // Office Number, Sum
 
         DecimalFormat df = new DecimalFormat("0.00");
@@ -56,11 +56,16 @@ public class Task2Main {
                 e.printStackTrace();
             }
         }
+        //sorting  Date - Sum by Date:
+        LinkedHashMap<String, Double> map1Sorted= map1.entrySet()
+                .stream()
+                .sorted((Map.Entry.<String, Double>comparingByKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         // writing Date - Sum output file
         try {
             String outfile1="C:"+separator+"task2"+separator+stats_dates;
             FileWriter writer1 = new FileWriter(outfile1);
-            map1.forEach((k,v) -> {
+            map1Sorted.forEach((k,v) -> {
                 try {
                     writer1.write(k + " - " + df.format(v)+"\n");
                 } catch (IOException e) {
@@ -74,7 +79,7 @@ public class Task2Main {
         }
 
         //sorting  Office Number - Sum by Sum value:
-        LinkedHashMap<String, Double> map2s= map2.entrySet()
+        LinkedHashMap<String, Double> map2Sorted= map2.entrySet()
                 .stream()
                 .sorted((Map.Entry.<String, Double>comparingByValue().reversed()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -83,7 +88,7 @@ public class Task2Main {
         try {
             String outfile2="C:"+separator+"task2"+separator+stats_offices;
             FileWriter writer2 = new FileWriter(outfile2);
-            map2s.forEach((k,v) -> {
+            map2Sorted.forEach((k,v) -> {
                 try {
                     writer2.write(k + " - " + df.format(v)+"\n");
                 } catch (IOException e) {
