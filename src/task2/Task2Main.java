@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Task2Main {
     public static void main(String...args) {
@@ -21,7 +21,7 @@ public class Task2Main {
         String [] filePath=new String[N_input];
 
         TreeMap<String, Double> map1=new TreeMap<>(); // Date, Sum
-        TreeMap<String, Double> map2=new TreeMap<>();  // Office Number, Sum
+        HashMap<String, Double> map2=new HashMap<>();  // Office Number, Sum
 
         DecimalFormat df = new DecimalFormat("0.00");
         df.setRoundingMode(RoundingMode.UP);
@@ -72,11 +72,18 @@ public class Task2Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //sorting  Office Number - Sum by Sum value:
+        LinkedHashMap<String, Double> map2s= map2.entrySet()
+                .stream()
+                .sorted((Map.Entry.<String, Double>comparingByValue().reversed()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
         // writing Office Number - Sum output file
         try {
             String outfile2="C:"+separator+"task2"+separator+stats_offices;
             FileWriter writer2 = new FileWriter(outfile2);
-            map2.forEach((k,v) -> {
+            map2s.forEach((k,v) -> {
                 try {
                     writer2.write(k + " - " + df.format(v)+"\n");
                 } catch (IOException e) {
